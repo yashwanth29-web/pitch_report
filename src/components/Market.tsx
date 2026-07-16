@@ -312,9 +312,9 @@ export default function Market() {
                             >
                               {/* Pulse wave around active node */}
                               <circle 
-                                cx={`${node.x}%`} 
-                                cy={`${node.y}%`} 
-                                r={hoveredCity === node.name ? "14" : "8"} 
+                                cx={node.x * 4} 
+                                cy={node.y * 3} 
+                                r={hoveredCity === node.name ? 14 : 8} 
                                 stroke={node.name === 'Hyderabad' ? '#14B8A6' : '#2563EB'} 
                                 strokeWidth="1" 
                                 fill="none" 
@@ -322,16 +322,16 @@ export default function Market() {
                                 className="transition-all duration-300"
                               />
                               <circle 
-                                cx={`${node.x}%`} 
-                                cy={`${node.y}%`} 
-                                r={hoveredCity === node.name ? "7" : "4"} 
+                                cx={node.x * 4} 
+                                cy={node.y * 3} 
+                                r={hoveredCity === node.name ? 7 : 4} 
                                 fill={node.name === 'Hyderabad' ? '#14B8A6' : (hoveredCity === node.name ? "#06B6D4" : "#2563EB")} 
                                 className="transition-all duration-300 shadow-lg" 
                               />
                               {hoveredCity === node.name && (
                                 <circle 
-                                  cx={`${node.x}%`} 
-                                  cy={`${node.y}%`} 
+                                  cx={node.x * 4} 
+                                  cy={node.y * 3} 
                                   r="22" 
                                   stroke="#06B6D4" 
                                   strokeWidth="1.5" 
@@ -379,9 +379,9 @@ export default function Market() {
                               className="cursor-pointer"
                             >
                               <circle 
-                                cx={`${node.x}%`} 
-                                cy={`${node.y}%`} 
-                                r={hoveredCity === node.name ? "14" : "8"} 
+                                cx={node.x * 4} 
+                                cy={node.y * 3} 
+                                r={hoveredCity === node.name ? 14 : 8} 
                                 stroke={node.name === 'Hyderabad' ? '#14B8A6' : '#2563EB'} 
                                 strokeWidth="1" 
                                 fill="none" 
@@ -389,16 +389,16 @@ export default function Market() {
                                 className="transition-all duration-300"
                               />
                               <circle 
-                                cx={`${node.x}%`} 
-                                cy={`${node.y}%`} 
-                                r={hoveredCity === node.name ? "7" : "4"} 
+                                cx={node.x * 4} 
+                                cy={node.y * 3} 
+                                r={hoveredCity === node.name ? 7 : 4} 
                                 fill={node.name === 'Hyderabad' ? '#14B8A6' : (hoveredCity === node.name ? "#06B6D4" : "#2563EB")} 
                                 className="transition-all duration-300" 
                               />
                               {hoveredCity === node.name && (
                                 <circle 
-                                  cx={`${node.x}%`} 
-                                  cy={`${node.y}%`} 
+                                  cx={node.x * 4} 
+                                  cy={node.y * 3} 
                                   r="22" 
                                   stroke="#06B6D4" 
                                   strokeWidth="1.5" 
