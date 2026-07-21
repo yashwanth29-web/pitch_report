@@ -13,7 +13,9 @@ import {
   Smartphone,
   ChevronRight,
   Car,
-  ShoppingCart
+  ShoppingCart,
+  Lock,
+  Shield
 } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts';
 
@@ -112,8 +114,9 @@ export default function Features() {
               </ResponsiveContainer>
             </div>
 
-            <div className="text-[10px] text-gray-500 font-bold z-10 border-t border-white/5 pt-3">
-              📊 Real-time hourly order pacing & sales reporting dashboard
+            <div className="text-[10px] text-emerald-400 font-bold z-10 border-t border-white/5 pt-3 flex items-center justify-between">
+              <span>📊 Real-time hourly order pacing & sales reporting console</span>
+              <span className="text-gray-400 font-normal text-[9px]">🔒 100% Direct Customer Data Ownership</span>
             </div>
           </div>
 
@@ -299,6 +302,48 @@ export default function Features() {
             </div>
           </div>
 
+        </div>
+
+        {/* Moat & Barrier to Entry Section */}
+        <div className="mt-20 border-t border-white/5 pt-16">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-sm font-bold text-indigo-400 tracking-widest uppercase mb-3">Defensibility Matrix</h2>
+            <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Why Can't Delivery Giants Copy This Tomorrow?
+            </h3>
+            <p className="text-gray-400 text-sm mt-3">
+              Delivery aggregators are operationally optimized for gig-driver hubs, not direct commute paths. Our architecture creates three distinct moats:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            {[
+              {
+                title: "Proprietary Routing Engine",
+                desc: "Unlike standard point-to-point map routing, our engine matches transit acceleration vectors and vehicle trajectory coordinates to queue orders automatically.",
+                badge: "Tech Moat"
+              },
+              {
+                title: "Dynamic GPS Kitchen Sync",
+                desc: "Synchronizes the kitchen preparation cycle directly with the driver's real-time ETA. If the driver hits a traffic delay, the system stalls cooking prep to ensure food is fresh at pickup.",
+                badge: "Operations Moat"
+              },
+              {
+                title: "100% Data Transparency",
+                desc: "Aggregators hide customer data profiles to guard their monopoly. PICK gives partner merchants complete, unfiltered customer CRM access and dashboard analytics.",
+                badge: "Data Moat"
+              }
+            ].map((moat, idx) => (
+              <div key={idx} className="p-6 rounded-2xl bg-gradient-to-b from-[#111827]/60 to-[#0a0f1d] border border-white/5 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-indigo-500/5 blur-xl rounded-full" />
+                <span className="inline-flex px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[9px] font-extrabold uppercase tracking-wider mb-4">
+                  {moat.badge}
+                </span>
+                <h4 className="text-base font-bold text-white mb-2">{moat.title}</h4>
+                <p className="text-xs text-gray-400 leading-relaxed">{moat.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
       </div>

@@ -187,6 +187,25 @@ export default function BusinessModel() {
 
         </div>
 
+        {/* Merchant Payback & Retention Card */}
+        <div className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-emerald-950/30 via-[#0a0f1d] to-brand-blue/10 border border-emerald-500/20 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-4 text-left">
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-black text-xl shrink-0">
+              ⚡
+            </div>
+            <div>
+              <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest block mb-0.5">Merchant Payback & Retention</span>
+              <h4 className="text-lg font-extrabold text-white">Merchant Breakeven within 4 Days</h4>
+              <p className="text-xs text-gray-400 mt-1 max-w-2xl">
+                Because of our low flat fee model instead of 25–30% delivery commissions, partner restaurants recover their onboarding and platform setup costs in just 4 days of takeaway volume, driving a 98% merchant retention rate.
+              </p>
+            </div>
+          </div>
+          <div className="px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-black shrink-0">
+            98% Merchant Retention
+          </div>
+        </div>
+
       </div>
     </section>
   );

@@ -432,6 +432,58 @@ export default function Market() {
 
         </div>
 
+        {/* Hyderabad Go-To-Market Economics */}
+        <div className="mt-16 border-t border-white/5 pt-16">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-sm font-bold text-brand-cyan tracking-widest uppercase mb-3">GTM Financial Math</h2>
+            <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Hyderabad Launch Economics (SOM & ARR)
+            </h3>
+            <p className="text-gray-400 text-sm mt-3">
+              Capturing just a fraction of the daily dine-in and takeaway volume across Hyderabad's top-tier outlets drives massive platform revenue:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 text-left">
+            {[
+              {
+                title: "2.25 Lakh",
+                label: "Daily Dine-In & Takeaway (SAM)",
+                desc: "Walk-in traffic across 1,250 target outlets (1,000 restaurants + 250 cafes)."
+              },
+              {
+                title: "₹7.8 Crore",
+                label: "Daily GMV (SAM)",
+                desc: "Total transaction spend based on a premium ₹350 average basket size."
+              },
+              {
+                title: "22,500",
+                label: "Year 1 Daily Orders (SOM)",
+                desc: "Conservative 10% capture of the target walk-in and pre-order market."
+              },
+              {
+                title: "₹15.7 Lakhs",
+                label: "Daily Commission Saved",
+                desc: "Retained margins back to local merchants instead of delivery markup."
+              },
+              {
+                title: "₹5.6 Lakhs",
+                label: "Daily Platform revenue",
+                desc: "Projected daily revenue from ₹18 merchant fee + ₹7 customer platform fee."
+              }
+            ].map((stat, idx) => (
+              <div key={idx} className="p-5 rounded-2xl bg-[#0a0f1d] border border-white/5 relative overflow-hidden flex flex-col justify-between">
+                <div className="absolute top-0 right-0 w-12 h-12 bg-brand-cyan/5 blur-lg rounded-full" />
+                <div>
+                  <span className="text-2xl font-black text-white">{stat.title}</span>
+                  <span className="text-[10px] text-brand-cyan font-bold block mt-1 uppercase tracking-wider leading-tight">{stat.label}</span>
+                </div>
+                <p className="text-[10px] text-gray-400 mt-4 leading-relaxed">{stat.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </section>
   );
