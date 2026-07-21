@@ -17,7 +17,6 @@ export default function Navbar({ onInvestClick }: NavbarProps) {
     { label: 'Features', id: 'features' },
     { label: 'Business Model', id: 'business-model' },
     { label: 'Financials', id: 'financials' },
-    { label: 'Roadmap', id: 'roadmap' },
     { label: 'Funding', id: 'funding' }
   ];
 

@@ -41,8 +41,8 @@ interface CityOpportunity {
 export default function Market() {
   const [activeSegment, setActiveSegment] = useState<'telugu' | 'india'>('telugu');
   
-  // View Modes: 'map' | 'bar' | 'bubble' | 'table'
-  const [viewMode, setViewMode] = useState<'map' | 'bar' | 'bubble' | 'table'>('map');
+  // View Modes: 'bar' | 'table'
+  const [viewMode, setViewMode] = useState<'bar' | 'table'>('bar');
 
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<'rank' | 'city' | 'ordersRaw'>('rank');
@@ -233,9 +233,7 @@ export default function Market() {
               {/* View Switches */}
               <div className="flex gap-2 overflow-x-auto">
                 {[
-                  { id: 'map', label: 'Network Map', icon: <Map className="w-3.5 h-3.5" /> },
                   { id: 'bar', label: 'Bar Chart', icon: <BarChart2 className="w-3.5 h-3.5" /> },
-                  { id: 'bubble', label: 'Bubble Chart', icon: <CircleDot className="w-3.5 h-3.5" /> },
                   { id: 'table', label: 'Data Table', icon: <Table className="w-3.5 h-3.5" /> }
                 ].map((tab) => (
                   <button
@@ -259,175 +257,7 @@ export default function Market() {
 
               <AnimatePresence mode="wait">
                 
-                {/* 1. Map Layout */}
-                {viewMode === 'map' && (
-                  <motion.div
-                    key="map-view"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="flex-1 flex flex-col justify-between relative"
-                  >
-                    <div>
-                      <h4 className="text-sm font-bold text-white mb-1">Glow Heat Nodes</h4>
-                      <p className="text-[11px] text-gray-400 mb-6">Visual mapping of targeted outlet densities and geographic nodes.</p>
-                    </div>
-
-                    <div className="h-80 w-full relative flex items-center justify-center">
-                      {activeSegment === 'telugu' ? (
-                        <svg className="w-full h-full text-gray-800" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          {/* Telangana Region Outline Shape */}
-                          <path 
-                            d="M 80 50 L 170 30 L 220 80 L 230 140 L 160 170 L 110 160 L 70 120 Z" 
-                            fill="rgba(37, 99, 235, 0.05)" 
-                            stroke="rgba(37, 99, 235, 0.3)" 
-                            strokeWidth="1.5" 
-                            className="transition-all duration-500 hover:fill-brand-blue/10"
-                          />
-                          <text x="120" y="80" fill="rgba(37, 99, 235, 0.4)" className="text-[10px] font-black uppercase tracking-widest pointer-events-none">Telangana SOM</text>
-
-                          {/* Andhra Pradesh Region Outline Shape */}
-                          <path 
-                            d="M 230 140 L 290 120 L 350 160 L 360 210 L 260 270 L 160 280 L 130 220 L 160 170 Z" 
-                            fill="rgba(6, 182, 212, 0.04)" 
-                            stroke="rgba(6, 182, 212, 0.3)" 
-                            strokeWidth="1.5" 
-                            className="transition-all duration-500 hover:fill-brand-cyan/10"
-                          />
-                          <text x="210" y="220" fill="rgba(6, 182, 212, 0.4)" className="text-[10px] font-black uppercase tracking-widest pointer-events-none">Andhra Pradesh SOM</text>
-
-                          {/* Connecting Network Grid Corridors */}
-                          {/* Hyderabad -> Warangal -> Karimnagar -> Khammam */}
-                          <path d="M 152 105 L 200 84 L 192 54 M 200 84 L 224 126" stroke="rgba(37, 99, 235, 0.2)" strokeWidth="1" strokeDasharray="3 3" />
-                          
-                          {/* Visakhapatnam -> Kakinada -> Rajahmundry -> Vijayawada -> Guntur -> Tirupati */}
-                          <path d="M 352 96 L 328 138 L 296 144 L 248 165 L 232 192 L 176 264" stroke="rgba(6, 182, 212, 0.2)" strokeWidth="1" strokeDasharray="3 3" />
-
-                          {apMapNodes.map((node) => (
-                            <g 
-                              key={node.name}
-                              onMouseEnter={() => setHoveredCity(node.name)}
-                              onMouseLeave={() => setHoveredCity(null)}
-                              className="cursor-pointer"
-                            >
-                              {/* Pulse wave around active node */}
-                              <circle 
-                                cx={node.x * 4} 
-                                cy={node.y * 3} 
-                                r={hoveredCity === node.name ? 14 : 8} 
-                                stroke={node.name === 'Hyderabad' ? '#14B8A6' : '#2563EB'} 
-                                strokeWidth="1" 
-                                fill="none" 
-                                opacity={hoveredCity === node.name ? 1 : 0.2}
-                                className="transition-all duration-300"
-                              />
-                              <circle 
-                                cx={node.x * 4} 
-                                cy={node.y * 3} 
-                                r={hoveredCity === node.name ? 7 : 4} 
-                                fill={node.name === 'Hyderabad' ? '#14B8A6' : (hoveredCity === node.name ? "#06B6D4" : "#2563EB")} 
-                                className="transition-all duration-300 shadow-lg" 
-                              />
-                              {hoveredCity === node.name && (
-                                <circle 
-                                  cx={node.x * 4} 
-                                  cy={node.y * 3} 
-                                  r="22" 
-                                  stroke="#06B6D4" 
-                                  strokeWidth="1.5" 
-                                  fill="none" 
-                                  className="animate-ping" 
-                                />
-                              )}
-                            </g>
-                          ))}
-                        </svg>
-                      ) : (
-                        <svg className="w-full h-full text-gray-800" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          {/* India Map Outline */}
-                          <path 
-                            d="M 200 20 L 250 50 L 260 95 L 290 110 L 320 150 L 280 190 L 240 250 L 205 300 L 195 300 L 170 250 L 120 190 L 100 150 L 110 95 L 130 60 Z" 
-                            fill="rgba(255, 255, 255, 0.02)" 
-                            stroke="rgba(255, 255, 255, 0.08)" 
-                            strokeWidth="1.5" 
-                            strokeDasharray="4 4" 
-                          />
-                          <text x="160" y="140" fill="rgba(255, 255, 255, 0.04)" className="text-[12px] font-black uppercase tracking-[0.2em] pointer-events-none">India TAM Expansion</text>
-
-                          {/* Animated paths out from Hyderabad node */}
-                          {indiaMapNodes.map((node) => {
-                            if (node.name === 'Hyderabad') return null;
-                            return (
-                              <g key={`path-${node.name}`}>
-                                <line 
-                                  x1="176" 
-                                  y1="180" 
-                                  x2={`${node.x * 4}`} 
-                                  y2={`${node.y * 3}`} 
-                                  stroke="rgba(6, 182, 212, 0.25)" 
-                                  strokeWidth="1.5" 
-                                  className="animate-pulse"
-                                />
-                              </g>
-                            );
-                          })}
-                          {indiaMapNodes.map((node) => (
-                            <g 
-                              key={node.name}
-                              onMouseEnter={() => setHoveredCity(node.name)}
-                              onMouseLeave={() => setHoveredCity(null)}
-                              className="cursor-pointer"
-                            >
-                              <circle 
-                                cx={node.x * 4} 
-                                cy={node.y * 3} 
-                                r={hoveredCity === node.name ? 14 : 8} 
-                                stroke={node.name === 'Hyderabad' ? '#14B8A6' : '#2563EB'} 
-                                strokeWidth="1" 
-                                fill="none" 
-                                opacity={hoveredCity === node.name ? 1 : 0.2}
-                                className="transition-all duration-300"
-                              />
-                              <circle 
-                                cx={node.x * 4} 
-                                cy={node.y * 3} 
-                                r={hoveredCity === node.name ? 7 : 4} 
-                                fill={node.name === 'Hyderabad' ? '#14B8A6' : (hoveredCity === node.name ? "#06B6D4" : "#2563EB")} 
-                                className="transition-all duration-300" 
-                              />
-                              {hoveredCity === node.name && (
-                                <circle 
-                                  cx={node.x * 4} 
-                                  cy={node.y * 3} 
-                                  r="22" 
-                                  stroke="#06B6D4" 
-                                  strokeWidth="1.5" 
-                                  fill="none" 
-                                  className="animate-ping" 
-                                />
-                              )}
-                            </g>
-                          ))}
-                        </svg>
-                      )}
-                      
-                      {/* Interactive Float Tooltip */}
-                      {hoveredCity && (
-                        <div className="absolute bottom-4 bg-[#111827]/95 border border-brand-cyan/20 p-3 rounded-xl shadow-xl w-44 text-left backdrop-blur-xl">
-                          <span className="text-xs font-bold text-white block">{hoveredCity}</span>
-                          <span className="text-[10px] text-brand-cyan font-bold block mt-0.5">
-                            Target: {activeDataset.find(item => item.city === hoveredCity)?.dailyOrders.toLocaleString()} / day
-                          </span>
-                          <span className="text-[9px] text-gray-400 block mt-0.5">
-                            Yearly: {activeDataset.find(item => item.city === hoveredCity)?.yearlyOrders}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* 2. Bar Chart Pacing */}
+                {/* 1. Bar Chart Pacing */}
                 {viewMode === 'bar' && (
                   <motion.div
                     key="bar-view"
@@ -463,48 +293,6 @@ export default function Market() {
                             ))}
                           </Bar>
                         </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* 3. Bubble Chart Opportunity */}
-                {viewMode === 'bubble' && (
-                  <motion.div
-                    key="bubble-view"
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.98 }}
-                    className="flex-1 flex flex-col justify-between"
-                  >
-                    <div>
-                      <h4 className="text-sm font-bold text-white mb-1">Market Opportunity Bubble Matrix</h4>
-                      <p className="text-[11px] text-gray-400 mb-6">Visual matrix comparing City Rank (X), Daily Volume (Y), and Relative Basket Size (Z).</p>
-                    </div>
-
-                    <div className="h-72 w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 10 }}>
-                          <XAxis type="number" dataKey="rank" name="Rank" stroke="#4b5563" fontSize={9} tickLine={false} label={{ value: 'Market Rank', position: 'bottom', fill: '#4b5563', fontSize: 10 }} />
-                          <YAxis type="number" dataKey="ordersRaw" name="Daily Orders" stroke="#4b5563" fontSize={9} tickLine={false} label={{ value: 'Daily Orders', angle: -90, position: 'insideLeft', fill: '#4b5563', fontSize: 10 }} />
-                          <ZAxis type="number" dataKey="bubbleSize" range={[50, 450]} />
-                          <Tooltip 
-                            cursor={{ strokeDasharray: '3 3' }}
-                            contentStyle={{ backgroundColor: '#111827', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px' }}
-                            labelStyle={{ color: '#fff', fontSize: '11px', fontWeight: 'bold' }}
-                          />
-                          <Scatter name="Opportunity Mapping" data={processedData} fill="#06B6D4">
-                            {processedData.map((entry, index) => (
-                              <Cell 
-                                key={`cell-${index}`} 
-                                fill={colors[index % colors.length]} 
-                                opacity={hoveredCity === entry.city ? 1 : 0.8}
-                                onMouseEnter={() => setHoveredCity(entry.city)}
-                                onMouseLeave={() => setHoveredCity(null)}
-                              />
-                            ))}
-                          </Scatter>
-                        </ScatterChart>
                       </ResponsiveContainer>
                     </div>
                   </motion.div>

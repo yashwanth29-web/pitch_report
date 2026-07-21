@@ -77,6 +77,18 @@ export default function Solution() {
   const [simulationStep, setSimulationStep] = useState(0); 
   const [selectedRest, setSelectedRest] = useState<string | null>(null);
 
+  const [startX, setStartX] = useState('Gachibowli');
+  const [endY, setEndY] = useState('Hitech City');
+  const [searchRadius, setSearchRadius] = useState<number>(3); // 3 km radius default
+
+  useEffect(() => {
+    const route = routes.find(r => r.id === activeRouteId);
+    if (route) {
+      setStartX(route.start);
+      setEndY(route.end);
+    }
+  }, [activeRouteId]);
+
   const activeRoute = routes.find(r => r.id === activeRouteId) || routes[0];
 
   // Simulation timeline loop
@@ -229,31 +241,55 @@ export default function Solution() {
                   exit={{ opacity: 0, scale: 0.98 }}
                   className="flex-1 flex flex-col justify-between"
                 >
-                  {/* Preset Route Selectors */}
-                  <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center bg-[#0a0f1d] p-3 rounded-2xl border border-white/5">
-                    <div className="flex gap-2 overflow-x-auto w-full sm:w-auto">
-                      {routes.map(r => (
-                        <button
-                          key={r.id}
-                          disabled={isSimulatingRoute}
-                          onClick={() => { setActiveRouteId(r.id); setSelectedRest(null); }}
-                          className={`px-3 py-1.5 rounded-xl text-[10px] font-bold border transition-colors ${
-                            activeRouteId === r.id 
-                              ? 'bg-brand-blue border-brand-blue/30 text-white' 
-                              : 'bg-white/5 border-white/5 text-gray-400 hover:text-white'
-                          }`}
-                        >
-                          {r.label}
-                        </button>
-                      ))}
+                  {/* Custom Route Search (X to Y) */}
+                  <div className="flex flex-col gap-3 bg-[#0a0f1d] p-4 rounded-2xl border border-white/5 w-full">
+                    <div className="flex gap-2 items-center justify-between">
+                      <span className="text-[10px] font-bold text-brand-cyan uppercase tracking-widest">Commute Route Search</span>
+                      <div className="flex gap-1.5">
+                        {routes.map(r => (
+                          <button
+                            key={r.id}
+                            disabled={isSimulatingRoute}
+                            onClick={() => { setActiveRouteId(r.id); setSelectedRest(null); }}
+                            className={`px-2.5 py-1 rounded-lg text-[9px] font-bold border transition-colors ${
+                              activeRouteId === r.id 
+                                ? 'bg-brand-blue border-brand-blue/30 text-white' 
+                                : 'bg-white/5 border-white/5 text-gray-400 hover:text-white'
+                            }`}
+                          >
+                            {r.label.split(' ')[0]}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="flex flex-col gap-1">
+                        <label className="text-[9px] text-gray-500 font-bold uppercase">From Place X</label>
+                        <input 
+                          type="text" 
+                          value={startX} 
+                          onChange={(e) => setStartX(e.target.value)}
+                          disabled={isSimulatingRoute}
+                          className="bg-[#111827] border border-white/5 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-brand-blue/40" 
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <label className="text-[9px] text-gray-500 font-bold uppercase">To Place Y</label>
+                        <input 
+                          type="text" 
+                          value={endY} 
+                          onChange={(e) => setEndY(e.target.value)}
+                          disabled={isSimulatingRoute}
+                          className="bg-[#111827] border border-white/5 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-brand-blue/40" 
+                        />
+                      </div>
+                    </div>
                     <button 
                       onClick={handleSimulate}
                       disabled={isSimulatingRoute}
-                      className="px-4 py-2 bg-gradient-to-r from-brand-blue to-brand-cyan text-white text-xs font-bold rounded-xl shadow-lg hover:shadow-brand-blue/30 shrink-0 w-full sm:w-auto"
+                      className="w-full py-2 bg-gradient-to-r from-brand-blue to-brand-cyan text-white text-xs font-bold rounded-xl shadow-lg hover:shadow-brand-blue/30 mt-1"
                     >
-                      {isSimulatingRoute ? 'Simulating Commute...' : 'Start Drive Simulation'}
+                      {isSimulatingRoute ? `Simulating Commute...` : `Search Route & Pre-Order (20 mins early)`}
                     </button>
                   </div>
 
@@ -315,12 +351,12 @@ export default function Solution() {
                         <span className="text-[9px] font-bold text-white uppercase tracking-wider">Live Commute Log</span>
                       </div>
                       <p className="text-[9px] text-gray-400 leading-tight">
-                        {simulationStep === 0 && 'Select a route and press simulation to map.'}
-                        {simulationStep === 1 && `Leaving ${activeRoute.start}... heading to ${activeRoute.end}`}
+                        {simulationStep === 0 && 'Specify X to Y and press pre-order to start simulation.'}
+                        {simulationStep === 1 && `Leaving ${startX}... heading to ${endY}`}
                         {simulationStep === 2 && `Passed Cafe. ${activeRoute.restaurants[0].status}`}
                         {simulationStep === 3 && `Passed Drive-By. ${activeRoute.restaurants[1].status}`}
                         {simulationStep === 4 && `Passed Restaurant. ${activeRoute.restaurants[2].status}`}
-                        {simulationStep === 5 && `Arrived at ${activeRoute.end}! Time saved: 15 Mins.`}
+                        {simulationStep === 5 && `Arrived at ${endY}! Time saved: 20 Mins.`}
                       </p>
                     </div>
                   </div>
@@ -363,27 +399,52 @@ export default function Solution() {
                   exit={{ opacity: 0, scale: 0.98 }}
                   className="flex-1 flex flex-col justify-between"
                 >
-                  <div className="bg-[#0a0f1d] p-4 rounded-2xl border border-white/5 text-center flex-1 flex flex-col justify-center items-center">
-                    <div className="w-16 h-16 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center text-brand-cyan mb-4 animate-pulse">
-                      <Compass className="w-8 h-8" />
+                  <div className="bg-[#0a0f1d] p-5 rounded-2xl border border-white/5 text-center flex-1 flex flex-col justify-center items-center">
+                    <div className="w-12 h-12 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center text-brand-cyan mb-3 animate-pulse">
+                      <Compass className="w-6 h-6" />
                     </div>
-                    <h4 className="text-base font-bold text-white mb-2">Pre-Order Radius Search</h4>
-                    <p className="text-xs text-gray-400 max-w-sm mb-6">
-                      Locate every restaurant within a 2-kilometer radius of your current location. Place direct kitchen takeaway orders and pick them up as you arrive.
+                    
+                    <h4 className="text-base font-bold text-white mb-1">Pre-Order Radius Search</h4>
+                    <p className="text-[11px] text-gray-400 max-w-sm mb-4">
+                      {searchRadius === 1 && "Perfect for a quick office or classroom escape. Grab your snack/tea immediately upon arrival!"}
+                      {searchRadius === 3 && "Explore full meals and popular outlets nearby. Pre-order 15 minutes ahead for seamless dine-in."}
+                      {searchRadius === 5 && "Wider selection covering top-rated dining spots. Order before you leave to ensure zero wait times."}
                     </p>
+
+                    {/* Interactive Radius Selector Buttons */}
+                    <div className="flex gap-2 mb-6">
+                      {[1, 3, 5].map((r) => (
+                        <button
+                          key={r}
+                          onClick={() => setSearchRadius(r)}
+                          className={`px-4 py-1.5 rounded-xl text-xs font-bold border transition-colors ${
+                            searchRadius === r
+                              ? 'bg-brand-cyan border-brand-cyan/30 text-brand-dark'
+                              : 'bg-white/5 border-white/5 text-gray-400 hover:text-white'
+                          }`}
+                        >
+                          {r} km Radius
+                        </button>
+                      ))}
+                    </div>
+
                     <div className="flex items-center gap-6 text-sm">
                       <div className="text-center">
-                        <div className="text-xl font-black text-brand-cyan">1.8 KM</div>
+                        <div className="text-xl font-black text-brand-cyan">{searchRadius}.0 KM</div>
                         <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Search Radius</span>
                       </div>
                       <div className="w-px h-8 bg-white/10" />
                       <div className="text-center">
-                        <div className="text-xl font-black text-brand-cyan">18</div>
-                        <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Partner Cafes</span>
+                        <div className="text-xl font-black text-brand-cyan">
+                          {searchRadius === 1 ? '6' : searchRadius === 3 ? '22' : '48'}
+                        </div>
+                        <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Partner Spots</span>
                       </div>
                       <div className="w-px h-8 bg-white/10" />
                       <div className="text-center">
-                        <div className="text-xl font-black text-brand-cyan">&lt; 10 Mins</div>
+                        <div className="text-xl font-black text-brand-cyan">
+                          {searchRadius === 1 ? '< 8 mins' : searchRadius === 3 ? '< 12 mins' : '< 18 mins'}
+                        </div>
                         <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Avg Prep Time</span>
                       </div>
                     </div>

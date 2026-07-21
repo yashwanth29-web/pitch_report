@@ -12,7 +12,8 @@ import {
   UtensilsCrossed, 
   Flame,
   ArrowRight,
-  TrendingUp
+  TrendingUp,
+  Car
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -22,11 +23,12 @@ interface HeroProps {
 }
 
 export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
-  // Mobile demo flow state: 'route' | 'menu' | 'time' | 'checkout' | 'success'
-  const [demoState, setDemoState] = useState<'route' | 'menu' | 'time' | 'checkout' | 'success'>('route');
+  // Mobile demo flow state: 'route' | 'menu' | 'time' | 'valet' | 'checkout' | 'success'
+  const [demoState, setDemoState] = useState<'route' | 'menu' | 'time' | 'valet' | 'checkout' | 'success'>('route');
   const [selectedRoute, setSelectedRoute] = useState<'office' | 'college' | 'gym' | null>(null);
   const [selectedDish, setSelectedDish] = useState<string | null>(null);
   const [prepTime, setPrepTime] = useState<string>('15 mins');
+  const [useValet, setUseValet] = useState<boolean>(false);
   const [isSimulating, setIsSimulating] = useState(false);
 
   const startConfetti = () => {
@@ -41,6 +43,7 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
   const resetSimulator = () => {
     setSelectedRoute(null);
     setSelectedDish(null);
+    setUseValet(false);
     setDemoState('route');
     setIsSimulating(false);
   };
@@ -57,7 +60,7 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
   }, [demoState]);
 
   return (
-    <section id="hero" className="relative min-h-screen pt-32 pb-20 flex items-center justify-center overflow-hidden hero-grid-pattern">
+    <section id="hero" className="relative min-h-screen pt-24 pb-16 flex items-center justify-center overflow-hidden hero-grid-pattern">
       {/* Background gradients */}
       <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-brand-blue/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[550px] h-[550px] rounded-full bg-brand-teal/10 blur-[130px] pointer-events-none" />
@@ -65,7 +68,7 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
       {/* Subtle Grid Animation */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(11,18,32,0)_0%,#0B1220_80%)] pointer-events-none" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
         {/* Left Column: Investor Messaging */}
         <div className="lg:col-span-7 flex flex-col justify-center text-left">
           {/* Tagline Badge */}
@@ -73,11 +76,11 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card border-brand-cyan/20 w-fit mb-6"
+            className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full glass-card border-brand-cyan/20 w-fit mb-4"
           >
-            <span className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse" />
-            <span className="text-xs font-semibold text-brand-cyan uppercase tracking-wider">₹100 Crore Startup Funding Pitch</span>
-            <ChevronRight className="w-3.5 h-3.5 text-brand-cyan/70" />
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse" />
+            <span className="text-[10px] font-semibold text-brand-cyan uppercase tracking-wider">₹100 Crore Startup Funding Pitch</span>
+            <ChevronRight className="w-3 h-3 text-brand-cyan/70" />
           </motion.div>
 
           {/* Headline */}
@@ -85,11 +88,11 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-none mb-8"
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-none mb-6"
           >
-            The Future of <br />
+            Skip the Wait on <br />
             <span className="bg-gradient-to-r from-brand-blue via-brand-cyan to-brand-teal bg-clip-text text-transparent">
-              Restaurant Ordering
+              Your Route or Radius
             </span>
           </motion.h1>
 
@@ -98,9 +101,9 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-lg sm:text-xl text-gray-400 max-w-xl mb-10 leading-relaxed"
+            className="text-sm sm:text-base text-gray-400 max-w-lg mb-8 leading-relaxed"
           >
-            Skip the wait. Pay true restaurant menu prices. Pre-order and pick up your meal or reserve a table before you arrive. No delivery fees, no markup.
+            Traveling from X to Y? Search your route and pre-order food 20 minutes before starting to pick up or eat-in with zero waiting. At home or office? Search within a selected radius (e.g. 3 km) to find, pre-order, and dine-in at the best restaurants. Pay true menu prices, zero markups.
           </motion.p>
 
           {/* CTAs */}
@@ -108,24 +111,13 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 mb-12"
+            className="flex flex-col sm:flex-row gap-3 mb-8"
           >
             <button 
-              onClick={onInvestClick}
-              className="relative group px-8 py-4 rounded-2xl font-bold text-white text-base overflow-hidden shadow-2xl shadow-brand-blue/30 hover:shadow-brand-blue/50 transition-all duration-300"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-brand-blue via-brand-cyan to-brand-teal" />
-              <span className="absolute -inset-px rounded-2xl bg-gradient-to-r from-brand-blue to-brand-teal opacity-0 group-hover:opacity-60 blur-md transition-all duration-500" />
-              <span className="relative flex items-center justify-center gap-2">
-                Request Pitch Deck <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-              </span>
-            </button>
-
-            <button 
               onClick={onWatchDemoClick}
-              className="px-8 py-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 font-bold text-white flex items-center justify-center gap-2 group"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-brand-blue via-brand-cyan to-brand-teal text-white font-bold transition-all duration-300 flex items-center justify-center gap-2 group text-sm shadow-xl shadow-brand-blue/20 hover:shadow-brand-blue/40"
             >
-              <Play className="w-5 h-5 fill-white text-white group-hover:scale-110 transition-transform" />
+              <Play className="w-4 h-4 fill-white text-white group-hover:scale-110 transition-transform" />
               Watch Demo Video
             </button>
           </motion.div>
@@ -158,10 +150,10 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 bg-brand-cyan/20 blur-[80px] rounded-full pointer-events-none z-0" />
           
           {/* Main phone container wrapper */}
-          <div className="relative w-[340px] h-[680px] rounded-[50px] border-4 border-gray-800 bg-[#070b13] shadow-2xl p-3.5 z-10 flex flex-col overflow-hidden ring-1 ring-white/10">
+          <div className="relative w-[300px] h-[600px] rounded-[44px] border-4 border-gray-800 bg-[#070b13] shadow-2xl p-3 z-10 flex flex-col overflow-hidden ring-1 ring-white/10">
             {/* Phone Speaker/Camera Notch */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl z-50 flex items-center justify-center">
-              <div className="w-12 h-1 bg-gray-800 rounded-full" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-5 bg-black rounded-b-xl z-50 flex items-center justify-center">
+              <div className="w-10 h-1 bg-gray-800 rounded-full" />
             </div>
 
             {/* Live Ordering App Interface */}
@@ -193,8 +185,8 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
                       className="flex-1 flex flex-col justify-between"
                     >
                       <div>
-                        <h4 className="text-sm font-bold text-white mb-1">Where are you heading?</h4>
-                        <p className="text-[10px] text-gray-400 mb-4">We will discover takeaways right along your travel path.</p>
+                        <h4 className="text-sm font-bold text-white mb-1">Choose Search Mode</h4>
+                        <p className="text-[10px] text-gray-400 mb-4">Select how you want to discover and pre-order food.</p>
                         
                         <div className="flex flex-col gap-2.5">
                           <button 
@@ -206,8 +198,8 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
                                 <Navigation className="w-4 h-4" />
                               </div>
                               <div>
-                                <div className="text-xs font-bold text-white">Office to Home</div>
-                                <div className="text-[9px] text-gray-400">Via Madhapur Outer Ring Rd</div>
+                                <div className="text-xs font-bold text-white">Route Travel (X to Y)</div>
+                                <div className="text-[9px] text-gray-400">Order 20m before arrival along commute</div>
                               </div>
                             </div>
                             <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-white" />
@@ -219,11 +211,11 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
                           >
                             <div className="flex items-center gap-3">
                               <div className="w-8 h-8 rounded-lg bg-brand-cyan/10 flex items-center justify-center text-brand-cyan">
-                                <Navigation className="w-4 h-4" />
+                                <MapPin className="w-4 h-4" />
                               </div>
                               <div>
-                                <div className="text-xs font-bold text-white">College to PG</div>
-                                <div className="text-[9px] text-gray-400">Via Jubilee Hills Rd</div>
+                                <div className="text-xs font-bold text-white">Nearby (3 km Radius)</div>
+                                <div className="text-[9px] text-gray-400">Pre-order to dine-in at closest spots</div>
                               </div>
                             </div>
                             <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-white" />
@@ -235,11 +227,11 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
                           >
                             <div className="flex items-center gap-3">
                               <div className="w-8 h-8 rounded-lg bg-brand-teal/10 flex items-center justify-center text-brand-teal">
-                                <Navigation className="w-4 h-4" />
+                                <UtensilsCrossed className="w-4 h-4" />
                               </div>
                               <div>
-                                <div className="text-xs font-bold text-white">Gym to Apartment</div>
-                                <div className="text-[9px] text-gray-400">Via Gachibowli Circle</div>
+                                <div className="text-xs font-bold text-white">Specific Food Centers</div>
+                                <div className="text-[9px] text-gray-400">Find any restaurant, cafe or tea joint</div>
                               </div>
                             </div>
                             <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-white" />
@@ -355,7 +347,7 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
                           {['10 mins', '15 mins', '20 mins', '30 mins'].map((time) => (
                             <button
                               key={time}
-                              onClick={() => { setPrepTime(time); setDemoState('checkout'); }}
+                              onClick={() => { setPrepTime(time); setDemoState('valet'); }}
                               className={`p-3 rounded-xl border text-center transition-colors font-bold text-xs ${
                                 prepTime === time 
                                   ? 'border-brand-blue bg-brand-blue/10 text-white' 
@@ -376,6 +368,56 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
                     </motion.div>
                   )}
 
+                  {demoState === 'valet' && (
+                    <motion.div 
+                      key="valet"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      className="flex-1 flex flex-col justify-between"
+                    >
+                      <div>
+                        <h4 className="text-sm font-bold text-white mb-1 flex items-center gap-1.5">
+                          <Car className="w-4 h-4 text-indigo-400" /> Valet Add-On
+                        </h4>
+                        <p className="text-[10px] text-gray-400 mb-4">Would you like to auto-book valet parking at the restaurant?</p>
+
+                        <div className="flex flex-col gap-3">
+                          <button
+                            onClick={() => { setUseValet(true); setDemoState('checkout'); }}
+                            className="p-3 rounded-xl border border-indigo-500/20 bg-indigo-950/20 hover:border-indigo-500/50 hover:bg-indigo-900/30 text-left transition-colors flex items-center justify-between group"
+                          >
+                            <div>
+                              <div className="text-xs font-bold text-white flex items-center gap-1">
+                                Yes, Book Valet <span className="text-[9px] text-indigo-400 font-extrabold uppercase bg-indigo-500/10 px-1.5 py-0.5 rounded">₹30</span>
+                              </div>
+                              <div className="text-[9px] text-gray-400 mt-0.5">Driver waits at pickup point for you</div>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-white" />
+                          </button>
+
+                          <button
+                            onClick={() => { setUseValet(false); setDemoState('checkout'); }}
+                            className="p-3 rounded-xl border border-white/5 bg-[#0e1628] hover:border-white/20 text-left transition-colors flex items-center justify-between group"
+                          >
+                            <div>
+                              <div className="text-xs font-bold text-white">No, Self Takeaway</div>
+                              <div className="text-[9px] text-gray-400 mt-0.5">I will park/walk to the counter myself</div>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-white" />
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <button 
+                        onClick={() => setDemoState('time')}
+                        className="text-[10px] text-center text-gray-500 hover:text-white mt-4"
+                      >
+                        ← Back to Pickup Time
+                      </button>
+                    </motion.div>
+                  )}
+
                   {demoState === 'checkout' && (
                     <motion.div 
                       key="checkout"
@@ -385,12 +427,12 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
                       className="flex-1 flex flex-col justify-between"
                     >
                       <div>
-                        <h4 className="text-sm font-bold text-white mb-3">Confirm Pre-Order</h4>
+                        <h4 className="text-sm font-bold text-white mb-2">Confirm Pre-Order</h4>
                         
                         {/* Compare billing visualizer */}
-                        <div className="space-y-2 mb-4">
-                          <div className="p-3 rounded-xl bg-red-950/20 border border-red-900/30">
-                            <div className="flex justify-between items-center text-[10px] text-red-400 font-bold mb-1">
+                        <div className="space-y-2 mb-3">
+                          <div className="p-2.5 rounded-xl bg-red-950/20 border border-red-900/30">
+                            <div className="flex justify-between items-center text-[10px] text-red-400 font-bold mb-0.5">
                               <span>Traditional Food Apps</span>
                               <span className="line-through">₹255</span>
                             </div>
@@ -399,35 +441,41 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
                             </div>
                           </div>
 
-                          <div className="p-3 rounded-xl bg-emerald-950/20 border border-emerald-900/30">
-                            <div className="flex justify-between items-center text-[10px] text-emerald-400 font-bold mb-1">
+                          <div className="p-2.5 rounded-xl bg-emerald-950/20 border border-emerald-900/30">
+                            <div className="flex justify-between items-center text-[10px] text-emerald-400 font-bold mb-0.5">
                               <span>PICK Billing</span>
-                              <span>₹187</span>
+                              <span>₹{useValet ? 217 : 187}</span>
                             </div>
                             <div className="text-[9px] text-emerald-400/80 leading-tight">
-                              True menu pricing. Direct-to-restaurant. Zero delivery. ₹7 customer platform fee.
+                              True menu pricing. Direct-to-restaurant. Zero delivery. ₹7 customer platform fee.{useValet && ' Includes ₹30 valet booking.'}
                             </div>
                           </div>
                         </div>
 
                         {/* Bill Breakdown */}
-                        <div className="space-y-1.5 p-3 rounded-xl bg-[#0e1628] border border-white/5 text-[10px]">
+                        <div className="space-y-1 p-2.5 rounded-xl bg-[#0e1628] border border-white/5 text-[10px]">
                           <div className="flex justify-between text-gray-400">
                             <span>Item Total</span>
                             <span className="text-white">₹180</span>
                           </div>
+                          {useValet && (
+                            <div className="flex justify-between text-gray-400">
+                              <span>Valet Service Fee</span>
+                              <span className="text-indigo-400 font-semibold">₹30</span>
+                            </div>
+                          )}
                           <div className="flex justify-between text-gray-400">
                             <span>Delivery Fee</span>
                             <span className="text-emerald-400">₹0</span>
                           </div>
                           <div className="flex justify-between text-gray-400">
                             <span>Platform fee</span>
-                            <span className="text-brand-cyan">₹7 (varies ₹5-10)</span>
+                            <span className="text-brand-cyan">₹7</span>
                           </div>
                           <div className="h-px bg-white/5 my-1" />
                           <div className="flex justify-between text-xs font-bold text-white">
                             <span>Total Bill</span>
-                            <span className="text-brand-cyan">₹187</span>
+                            <span className="text-brand-cyan">₹{useValet ? 217 : 187}</span>
                           </div>
                         </div>
                       </div>
@@ -449,7 +497,7 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
                           </>
                         ) : (
                           <>
-                            <span>Place Pre-Order (₹187)</span>
+                            <span>Place Pre-Order (₹{useValet ? 217 : 187})</span>
                             <ChevronRight className="w-4 h-4" />
                           </>
                         )}
@@ -475,11 +523,17 @@ export default function Hero({ onInvestClick, onWatchDemoClick }: HeroProps) {
                         </p>
 
                         {/* Tracker timeline */}
-                        <div className="w-full max-w-[220px] space-y-4 text-left">
+                        <div className="w-full max-w-[220px] space-y-3.5 text-left">
                           <div className="flex items-center gap-3">
                             <div className="w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[8px] font-bold">✓</div>
                             <span className="text-[10px] font-semibold text-white">Order Accepted (12:02 PM)</span>
                           </div>
+                          {useValet && (
+                            <div className="flex items-center gap-3">
+                              <div className="w-4 h-4 rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 text-[8px] font-extrabold">🚗</div>
+                              <span className="text-[10px] font-semibold text-white">Valet Driver Dispatched</span>
+                            </div>
+                          )}
                           <div className="flex items-center gap-3">
                             <div className="w-4 h-4 rounded-full bg-brand-cyan animate-pulse flex items-center justify-center text-white text-[8px] font-bold"></div>
                             <span className="text-[10px] font-semibold text-white">Preparing Food (In Progress)</span>

@@ -4,22 +4,25 @@ import {
   TrendingUp, 
   QrCode, 
   Map, 
+  MapPin,
   Bell, 
   Calendar, 
   ShieldCheck, 
   Award,
   Users,
   Smartphone,
-  ChevronRight
+  ChevronRight,
+  Car,
+  ShoppingCart
 } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts';
 
 export default function Features() {
   // Simulator states
   const [activeOrders, setActiveOrders] = useState(14);
-  const [rewardsPoints, setRewardsPoints] = useState(640);
   const [showNotification, setShowNotification] = useState(false);
   const [scannedQR, setScannedQR] = useState(false);
+  const [valetStatus, setValetStatus] = useState<'idle' | 'requested' | 'assigned' | 'ready'>('idle');
 
   // Fake chart data
   const data = [
@@ -149,50 +152,101 @@ export default function Features() {
               <div className="w-10 h-10 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue">
                 <Map className="w-5 h-5" />
               </div>
-              <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider bg-white/5 px-2 py-0.5 rounded-full">GPS</span>
+              <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider bg-white/5 px-2 py-0.5 rounded-full">Route GPS</span>
             </div>
 
             <div>
-              <h5 className="text-sm font-bold text-white mb-1">Commute Route Search</h5>
+              <h5 className="text-sm font-bold text-white mb-1">X to Y Commute Search</h5>
               <p className="text-[11px] text-gray-400 leading-relaxed">
-                Aggregates every food joint along your GPS navigation coordinates.
+                Aggregates every restaurant, cafe, and food center along your travel route. Pre-order 20 mins early and pick up without waiting.
               </p>
             </div>
 
             <div className="text-[10px] text-brand-cyan font-bold flex items-center gap-1">
-              Active Mapbox API integration <ChevronRight className="w-3 h-3" />
+              Active Route Path mapping <ChevronRight className="w-3 h-3" />
             </div>
           </div>
 
-          {/* Card 4: Customer Rewards (Span 1x1) */}
+          {/* Card 4: Radius-Based Discovery (Span 1x1) */}
           <div className="glass-card rounded-3xl p-6 border border-white/5 flex flex-col justify-between relative overflow-hidden">
             <div className="flex justify-between items-start">
               <div className="w-10 h-10 rounded-xl bg-brand-teal/10 flex items-center justify-center text-brand-teal">
-                <Award className="w-5 h-5" />
+                <MapPin className="w-5 h-5" />
               </div>
-              <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider bg-white/5 px-2 py-0.5 rounded-full">Loyalty Loop</span>
+              <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider bg-white/5 px-2 py-0.5 rounded-full">Range Finder</span>
             </div>
 
             <div>
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-xs font-bold text-white">Loyalty & Rewards</span>
-                <span className="text-xs font-bold text-brand-teal">{rewardsPoints} XP</span>
+              <h5 className="text-sm font-bold text-white mb-1">Custom Radius Pre-Order</h5>
+              <p className="text-[11px] text-gray-400 leading-relaxed">
+                Select your radius (e.g. 3 km) around your home, office, or PG to pre-order and eat-in or takeaway instantly.
+              </p>
+            </div>
+
+            <div className="text-[10px] text-brand-teal font-bold flex items-center gap-1">
+              Active Geolocation Radius querying <ChevronRight className="w-3 h-3" />
+            </div>
+          </div>
+
+          {/* Card 5: Smart Valet Parking Feature (Span 1x1) */}
+          <div className="glass-card rounded-3xl p-6 border border-white/5 flex flex-col justify-between relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-tr from-brand-blue/5 to-transparent pointer-events-none" />
+            <div className="flex justify-between items-start">
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+                <Car className="w-5 h-5 animate-pulse" />
               </div>
-              <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                <div className="h-full bg-brand-teal rounded-full" style={{ width: '64%' }} />
-              </div>
+              <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider bg-white/5 px-2 py-0.5 rounded-full">Automated Valet</span>
+            </div>
+
+            <div>
+              <h5 className="text-sm font-bold text-white mb-1">Automatic Valet Parking</h5>
+              <p className="text-[11px] text-gray-400 leading-relaxed">
+                Seamless valet request matched with your restaurant booking. Drop your car, skip the search, and enter right away.
+              </p>
             </div>
 
             <button 
-              onClick={() => setRewardsPoints(prev => prev + 50)}
-              className="w-full py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] text-white font-bold transition-all border border-white/5"
+              onClick={() => {
+                if (valetStatus === 'idle') {
+                  setValetStatus('requested');
+                  setTimeout(() => setValetStatus('assigned'), 1500);
+                  setTimeout(() => setValetStatus('ready'), 3500);
+                  setTimeout(() => setValetStatus('idle'), 6000);
+                }
+              }}
+              className="w-full py-2 bg-indigo-950/20 hover:bg-indigo-900/30 rounded-xl text-[10px] text-indigo-400 font-bold transition-all border border-indigo-500/20 flex items-center justify-center gap-1.5"
             >
-              Simulate Claiming ₹50 Reward
+              {valetStatus === 'idle' && 'Simulate Valet Booking'}
+              {valetStatus === 'requested' && '⏳ Dispatching Valet Driver...'}
+              {valetStatus === 'assigned' && '🚗 Driver assigned (ETA 3 mins)'}
+              {valetStatus === 'ready' && '✅ Driver Waiting at Restaurant!'}
             </button>
           </div>
 
-          {/* Card 5: Real-time Notifications (Span 2x1) */}
-          <div className="md:col-span-2 glass-card rounded-3xl p-6 border border-white/5 flex flex-col justify-between relative overflow-hidden">
+          {/* Card 6: Super & Hyper Market Grocery Takeaway (Span 1x1) */}
+          <div className="glass-card rounded-3xl p-6 border border-white/5 flex flex-col justify-between relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-tr from-brand-teal/5 to-transparent pointer-events-none" />
+            <div className="flex justify-between items-start">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                <ShoppingCart className="w-5 h-5" />
+              </div>
+              <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider bg-white/5 px-2 py-0.5 rounded-full">Grocery Hub</span>
+            </div>
+
+            <div>
+              <h5 className="text-sm font-bold text-white mb-1">Super & Hypermarket Pre-order</h5>
+              <p className="text-[11px] text-gray-400 leading-relaxed">
+                Don't waste 45 minutes standing in long checkout lines. Order groceries before you arrive and collect at the drive-through counter.
+              </p>
+            </div>
+
+            <div className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
+              Active counter pick-up ready <ChevronRight className="w-3 h-3" />
+            </div>
+          </div>
+
+          {/* Card 7: Real-time Notifications (Span 3x1 on large screen, 2x1 md) */}
+          <div className="md:col-span-3 glass-card rounded-3xl p-6 border border-white/5 flex flex-col justify-between relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-teal/5 blur-3xl rounded-full" />
             
             <div className="flex justify-between items-start">

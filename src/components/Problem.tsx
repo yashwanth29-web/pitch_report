@@ -24,12 +24,12 @@ export default function Problem() {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-sm font-bold text-brand-cyan tracking-widest uppercase mb-3">The Food Aggregator Duopoly</h2>
+          <h2 className="text-sm font-bold text-brand-cyan tracking-widest uppercase mb-3">Dine-In & Takeaway Inefficiency</h2>
           <h3 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-none mb-6">
-            The Broken Economics of Delivery
+            The Food Waiting Time Problem
           </h3>
           <p className="text-gray-400 text-lg">
-            Traditional delivery apps extract heavy commissions from restaurants and charge customers inflated prices, creating an inefficient model for dine-in and takeaways.
+            Traditional food apps focus entirely on delivery, forcing commuters, office employees, and students to wait 20+ minutes at counters or tables just to pick up or eat their food.
           </p>
         </div>
 
@@ -47,10 +47,10 @@ export default function Problem() {
               </h4>
               <ul className="space-y-4">
                 {[
-                  { title: "Inflated Menu Pricing", desc: "Menu items are marked up by 15-25% compared to ordering in person." },
-                  { title: "Compounded Fees & Delivery Charges", desc: "Customers pay delivery charges, distance fees, surge fees, and platform taxes." },
-                  { title: "No Pickup-First Experience", desc: "Aggregators hide pickup options, making route discovery inconvenient." },
-                  { title: "Long Restaurant Waiting Times", desc: "Dine-in pre-ordering doesn't exist, forcing customers to wait 20-30 mins after arriving." }
+                  { title: "No Route Commute Discovery", desc: "Travelers from X to Y cannot map their path to pre-order and grab food 20 minutes before starting." },
+                  { title: "Peak Canteen & Lunch Waiting", desc: "Office employees and students waste 20-30 minutes of their short breaks waiting for food prep." },
+                  { title: "No Custom Radius pre-ordering", desc: "Unable to set a radius (like 3 km) or search specific spots to pre-order and dine-in or pickup." },
+                  { title: "Inflated Menu & Delivery Pricing", desc: "Paying 25% marked up menu items plus compounded delivery fees for a nearby spot." }
                 ].map((item, index) => (
                   <motion.li 
                     key={index}

@@ -10,7 +10,7 @@ export default function SavingsComparison() {
   const deliveryCosts = useMemo(() => {
     const markup = avgBasketSize * 0.20; // 20% menu inflation markup
     const deliveryFee = 45;
-    const platformFee = 6;
+    const platformFee = 20; // ₹20 Platform fee on left side (Delivery App)
     const packingFee = 15;
     const perOrderCost = avgBasketSize + markup + deliveryFee + platformFee + packingFee;
     const monthlyTotal = perOrderCost * ordersPerMonth;
@@ -18,10 +18,11 @@ export default function SavingsComparison() {
   }, [avgBasketSize, ordersPerMonth]);
 
   const pickCosts = useMemo(() => {
-    const customerPlatformFee = avgBasketSize > 500 ? 10 : (avgBasketSize < 200 ? 5 : 7);
+    const customerPlatformFee = 10; // ₹10 Platform fee for pick-up order
+    const merchantCommission = avgBasketSize * 0.05; // 5% commission for pick-up order
     const perOrderCost = avgBasketSize + customerPlatformFee;
     const monthlyTotal = perOrderCost * ordersPerMonth;
-    return { perOrderCost: Math.round(perOrderCost), monthlyTotal: Math.round(monthlyTotal) };
+    return { perOrderCost: Math.round(perOrderCost), monthlyTotal: Math.round(monthlyTotal), merchantCommission: Math.round(merchantCommission) };
   }, [avgBasketSize, ordersPerMonth]);
 
   const monthlySavings = deliveryCosts.monthlyTotal - pickCosts.monthlyTotal;
@@ -85,7 +86,7 @@ export default function SavingsComparison() {
                   </div>
                   <div className="flex justify-between text-[11px] text-gray-500">
                     <span>Aggregator Platform Fee</span>
-                    <span className="text-white">₹5 - ₹8</span>
+                    <span className="text-red-400 font-semibold">₹20</span>
                   </div>
                   <div className="h-px bg-white/5 my-2" />
                   <div className="flex justify-between text-sm font-bold text-red-400">
@@ -119,7 +120,11 @@ export default function SavingsComparison() {
                   </div>
                   <div className="flex justify-between text-[11px] text-gray-500">
                     <span>PICK Customer Fee</span>
-                    <span className="text-emerald-400">₹5 - ₹10 only</span>
+                    <span className="text-emerald-400 font-semibold">₹10</span>
+                  </div>
+                  <div className="flex justify-between text-[11px] text-gray-500">
+                    <span>Merchant Commission</span>
+                    <span className="text-emerald-400 font-semibold">5%</span>
                   </div>
                   <div className="h-px bg-white/5 my-2" />
                   <div className="flex justify-between text-sm font-bold text-emerald-400">
